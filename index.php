@@ -1,6 +1,7 @@
-<link rel="stylesheet" href="staile.css">
+<link rel="stylesheet" href="staile.css" type="text/css">
 <body style="font-family:arial">
-   
+    
+</body>
 <?php
 
 echo "<div class='foreach'>";
@@ -156,16 +157,15 @@ echo "</div>";
 
             $dadosPost->retornar();
         }
-    } else {
-        echo "n existe porra";
-    }
+    } 
 
     echo "<form method='post' action=''> 
         <br>
-        <input type='text' name='ocup' placeholder='Insira aqui o nome'>
-        <input type='text' name='sal' placeholder='Insira aqui a idade'>
+        <input type='text' name='ocup' placeholder='Insira aqui a ocupação'>
+        <input type='text' name='sal' placeholder='Insira aqui o salário'>
         <button type=submit> Enviar </button>
     </form>";
+    echo "</div>";
 //______________________________________________________________________________________________
     echo '<div class="hora">';
     echo "<hr><h1> Agora é manipulação de DATA e HORA ↓↓↓</h1><br>";
@@ -216,26 +216,6 @@ echo "</div>";
 
     echo "</div>";
 
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    echo "</div>"
-
-
-
 
 
 
@@ -261,5 +241,3 @@ echo "</div>";
     
 
 ?>
-
-</body>
