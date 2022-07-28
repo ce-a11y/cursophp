@@ -1,7 +1,6 @@
 <link rel="stylesheet" href="staile.css">
 <body style="font-family:arial">
-    teste
-</body>
+   
 <?php
 
 echo "<div class='foreach'>";
@@ -263,3 +262,4 @@ echo "</div>";
 
 ?>
 
+</body>
