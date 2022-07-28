@@ -1,0 +1,15 @@
+body {
+    background-color:rgb(235, 235, 235);
+}
+
+.foreach, .assoc, .fun, .get, .post {
+    display:none;
+}
+
+.calc {
+    display: flex;
+}
+.data {
+    font-size: 15px;
+    float: right;
+}
