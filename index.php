@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="staile.css">
 <body style="font-family:arial">
     
 </body>
