@@ -50,8 +50,8 @@ echo '<div class="hora">';
             $res = strtotime($data2) - strtotime($data1);
             $res = floor($res / (60*60*24));
             if ($res == 1) {
-            return "<hr>A distância entre a primeira e a segunda data é $res dia!";
-        } else {return "<hr>A distância entre a primeira e a segunda data é $res dias!";
+            return "<br>A distância entre a primeira e a segunda data é $res dia!";
+        } else {return "<br>A distância entre a primeira e a segunda data é $res dias!";
         }
     }
 
