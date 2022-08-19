@@ -9,6 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $erro_geral = "Todos os campos são necessários!";
             
         } else {
+            // Faz a "limpagem" dos campos
             $email = limpar($_POST['email']);
             $senha = limpar($_POST['senha']);
             if (((!filter_var($email, FILTER_VALIDATE_EMAIL))) or ($senha <=7)) {
@@ -16,13 +17,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $erro_geral = 'E-mail ou senha incorretos!';
               
             } else {
-            // Começa a fazer a validação com o banco de dados ↓
+            // Faz a validação (vê se o email e a senha bate) com o banco de dados ↓
                 $sql = $pdo->prepare("SELECT * FROM usuarios WHERE email = ? AND senha = ? LIMIT 1");
                 $sql->execute([$email,$senha]);
                 $usuario = $sql->fetch();
                 if(!$usuario) {
+                    // Caso não encontre o usuário
                     $erro_geral = 'E-mail ou senha incorretos!';
                 } else {
+                    // Caso encontre, gera um token e injeta no banco de dados o token.
+                    // Esse token vai ser armazenado na sessão e vai ser necessário pra acessar a página restrita.
                     $token = sha1(uniqid().date('d-m-Y-h-i-s'));
 
                     $log = $pdo->prepare("UPDATE usuarios SET token = ? WHERE email = ?");
@@ -62,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
  <form method='post'>
     <h1>Login</h1>
-
+                    <!-- Caso haja uma mensagem de erro ou sucesso, faz aparecer na tela -->
     <?php if(isset($_GET['resultado']) and $_GET['resultado'] == 'ok'){ ?>
 
         <div class="sucesso animate__animated animate__zoomInDown">
