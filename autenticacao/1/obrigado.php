@@ -3,12 +3,10 @@
 require ('db/config.php');
 
 
-
+// Verifica se tem algum nome escrito na URL
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['nome']) and !empty($_GET['nome'])) {
         $nome = limpar($_GET['nome']);
-    } else {
-        $nome = '';
     }
 }   
 
@@ -29,8 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 </head>
 <body>
     
-
-    <?php if(isset($_GET['nome'])) {
+<!-- Verifica se tem a variável nome, se tiver exibe o nome na tela, caso contrário não -->
+    <?php if(isset($nome)) {
         echo "<h1>Obrigado por se cadastrar, $nome!!!<h1>";
         } else {
             echo '<h1>Obrigado por se cadastrar!</h1>';
@@ -38,7 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 ?>
 
 <script>
-
+    
+// Depois de 3 seg manda a pessoa pra tela de login
   setTimeout(() => {
         window.location.replace('index.php?resultado=ok')
     }, 3000);
