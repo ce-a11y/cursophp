@@ -1,22 +1,23 @@
 <?php 
 require '../db/config.php';
+// ↑ Se conecta com o banco de dados
 
+// Verifica se existe uma sessão token iniciada
 if (!isset($_SESSION['token'])) {
     header('location:../index.php');
 } else {
+// Caso haja, quer dizer que a pessoa conseguiu passar pela verificação do login
+// Então, busca no banco de dados o usuário que tem esse token
     $tkn = $_SESSION['token'];
     $sql = $pdo->prepare("SELECT * FROM usuarios WHERE token = ? LIMIT 1");
     $sql->execute([$tkn]);
     $buscaToken = $sql->fetch(PDO::FETCH_ASSOC);
     if ($buscaToken) {
+// Caso exista um usuário com esse token, carrega a página normalmente e escreve a mensagem
         $boas_vindas = "Opa, ".$buscaToken['nome'].", seja bem vindo(a) à página restrita";
-} else {header('location:../index.php');}
-}
-
-
-if (isset($_GET['destruir'])) {
-    session_unset();
-    session_destroy();
+        
+// Caso contrário, manda a pessoa pra página de login
+    } else {header('location:../index.php');}
 }
 
 ?>
@@ -59,6 +60,7 @@ if (isset($_GET['destruir'])) {
 
     <h2><?php echo $boas_vindas.'<br>'?></h2>
 
+<!-- Esse botão envia pra página k.php que kebra a sessão! -->
     <a href='k.php'>
 <div class="sucesso animate__animated animate__zoomInDown">
     Deslogar
