@@ -9,8 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $erro_geral = "Todos os campos são necessários!";
             
         } else {
-            $email = limparPost($_POST['email']);
-            $senha = limparPost($_POST['senha']);
+            $email = limpar($_POST['email']);
+            $senha = limpar($_POST['senha']);
             if (((!filter_var($email, FILTER_VALIDATE_EMAIL))) or ($senha <=7)) {
                // Campo(s) inválido(s)!
                 $erro_geral = 'E-mail ou senha incorretos!';
@@ -31,9 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $_SESSION['token'] = $token;
                     header('location:restrita/l.php');
                 }
-            }
-                echo 'n sei ';
-            
+            }            
 
         }
     }
