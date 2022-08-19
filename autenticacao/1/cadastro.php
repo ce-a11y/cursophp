@@ -6,8 +6,10 @@
 //  require 'PHPMailer/src/PHPMailer.php';
 //  require 'PHPMailer/src/SMTP.php';
 
+// ↓ Puxa o arquivo de acesso ao banco de dados
 require 'db/config.php';
 
+// Verifica se houve a postagem dos campos e se não estão vazios
 if (isset($_POST['nome']) and isset($_POST['email']) and isset($_POST['senha']) and isset($_POST['rptSenha'])) {
     if (empty($_POST['nome']) or empty($_POST['email']) or empty($_POST['senha']) or empty($_POST['rptSenha'])) {
         $erro_geral = 'Todos os campos são necessários';
@@ -17,13 +19,15 @@ if (isset($_POST['nome']) and isset($_POST['email']) and isset($_POST['senha']) 
         $erroRptSenha='';
         $chk = '';
     }else {        
+// Faz a "limpagem" dos campos enviados e criptografa a senha
         $nome = limpar($_POST['nome']);
         $email = limpar($_POST['email']);
         $senha = limpar($_POST['senha']);
         $senha_cript = sha1($senha);
         $rptSenha = limpar($_POST['rptSenha']);
         $chk = limpar($_POST['termos']);
-
+        
+// verifica se os campos estão de acordo
         if (!preg_match("/^[a-zA-ZÀ-ú ]*$/",$nome) or empty($nome)) {
             $erroNome = "Insira um nome válido!";
 
@@ -43,11 +47,13 @@ if (isset($_POST['nome']) and isset($_POST['email']) and isset($_POST['senha']) 
             $erroChk = 'É necessária a autorização!';
         }
 
+// Caso não haja nenhum erro, começa o processo de inserção no banco de dados
         if(!isset($erroNome) and !isset($erroEmail) and !isset($erroSenha) and !isset($erroRptSenha) and !isset($erroChk)) {
             $sql = $pdo->prepare("SELECT * FROM usuarios WHERE email=? LIMIT 1");
             $sql->execute([$email]);
             $usuario = $sql->fetch();
-            
+
+// Caso o e-mail enviado não conste no banco de dados, insere o que foi informado
             if(!$usuario) {
                 $recuperaSenha = '';
                 $token = '';
@@ -58,6 +64,9 @@ if (isset($_POST['nome']) and isset($_POST['email']) and isset($_POST['senha']) 
                 $sql = $pdo->prepare("INSERT INTO usuarios VALUES (null,?,?,?,?,?,?,?)");
                 $sql->execute([$nome,$email,$senha_cript,$recuperaSenha,$token,$status,$data]);
 
+// Aqui é o seguinte: caso estivesse só no localhost era só pra mandar pra página de login, mas caso
+// estivesse na internet era p enviar um e-mail com um código de confirmação e tal
+// Só que como o plano grátis da hospedagem lá n tem suporte a webmail, então acabou que não deu certo 
             if($modo == 'local') {
                 header('location: index.php?resultado=ok');
             } 
@@ -89,7 +98,7 @@ if (isset($_POST['nome']) and isset($_POST['email']) and isset($_POST['senha']) 
               }
          }
            else {
-
+    // Caso o e-mail já conste no banco de dados ↓
             $erro_geral = "Usuário já cadastrado.";
         }
     }
@@ -127,6 +136,7 @@ if (isset($_POST['nome']) and isset($_POST['email']) and isset($_POST['senha']) 
  <form method='post'>
     <h1>Cadastro</h1>
 
+<!-- Caso haja alguma mensagem de erro geral (como algum campo vazio ou usuário já existente), exibe para o usuário-->
     <?php if (isset($erro_geral)) {    ?>
    
      <div class="erro-geral animate__animated animate__rubberBand">
@@ -139,7 +149,7 @@ if (isset($_POST['nome']) and isset($_POST['email']) and isset($_POST['senha']) 
     
     ?>
 
-   
+<!-- Aqui basicamente faz com que, caso haja algum erro exiba pro usuário e mantenha escrito no campo o que ele escreveu -->
     <div class="grupoInput">
     <img class= "iconeInput" src="imgs/carteira-de-identidade.png">
     <input type="text" <?php if (isset($erroNome)) { echo 'class="erro-input"'; } if (isset($_POST['nome']) and !empty($_POST['nome'])) { echo "value='".$_POST['nome']."'"; } ?> name='nome' placeholder="Digite seu nome completo" required>
